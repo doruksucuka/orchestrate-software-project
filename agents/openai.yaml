@@ -1,0 +1,4 @@
+interface:
+  display_name: "Software Project Orchestrator"
+  short_description: "Run an AI-managed software delivery lifecycle"
+  default_prompt: "Use $orchestrate-software-project to bootstrap and manage this software project from discovery through release readiness."
