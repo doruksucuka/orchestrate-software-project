@@ -30,32 +30,39 @@ Her kritik aşama bir karar paketiyle Product Owner onayına sunulur.
 
 Repository özel olduğu için GitHub hesabınızın terminalde yetkilendirilmiş olması gerekir.
 
-### Codex ve Claude Code'da ortak kullanmak
+### Codex ve Claude Code'a tek komutla kurulum
 
-Skill'i bir kez klonlayıp Claude Code dizinine sembolik bağlantı verebilirsiniz:
+[`skills`](https://skills.sh) CLI, Skill'i global olarak kurar ve iki aracın doğru dizinlerini otomatik yönetir:
 
 ```bash
-mkdir -p ~/.agents/skills ~/.claude/skills
-
-git clone https://github.com/doruksucuka/orchestrate-software-project.git \
-  ~/.agents/skills/orchestrate-software-project
-
-ln -s ~/.agents/skills/orchestrate-software-project \
-  ~/.claude/skills/orchestrate-software-project
+npx skills add https://github.com/doruksucuka/orchestrate-software-project \
+  --skill orchestrate-software-project \
+  --global \
+  --agent codex \
+  --agent claude-code \
+  --yes
 ```
 
 ### Yalnızca Codex
 
 ```bash
-git clone https://github.com/doruksucuka/orchestrate-software-project.git \
-  ~/.agents/skills/orchestrate-software-project
+npx skills add https://github.com/doruksucuka/orchestrate-software-project \
+  --skill orchestrate-software-project --global --agent codex --yes
 ```
 
 ### Yalnızca Claude Code
 
 ```bash
-git clone https://github.com/doruksucuka/orchestrate-software-project.git \
-  ~/.claude/skills/orchestrate-software-project
+npx skills add https://github.com/doruksucuka/orchestrate-software-project \
+  --skill orchestrate-software-project --global --agent claude-code --yes
+```
+
+`--global` Skill'i tüm projelerde kullanılabilir yapar. `--yes` etkileşimli onayları atlar; hedef araçları kendiniz seçmek isterseniz bu parametreyi kaldırabilirsiniz.
+
+Kurulumu doğrulamak için:
+
+```bash
+npx skills list --global
 ```
 
 ## Kullanım
@@ -85,15 +92,14 @@ Skill, açıklamasıyla eşleşen kapsamlı proje başlatma ve yönetme talepler
 ## Güncelleme
 
 ```bash
-git -C ~/.agents/skills/orchestrate-software-project pull --ff-only
+npx skills update orchestrate-software-project --global --yes
 ```
-
-Sembolik bağlantı kullanılan kurulumda bu komut hem Codex hem Claude Code kopyasını günceller.
 
 ## Repository yapısı
 
 ```text
 orchestrate-software-project/
+├── README.md
 ├── SKILL.md
 ├── agents/
 │   └── openai.yaml
@@ -103,6 +109,7 @@ orchestrate-software-project/
     └── risk-profiles.md
 ```
 
+- `README.md`: Kurulum, kullanım ve repository özeti.
 - `SKILL.md`: Ana orkestrasyon kuralları ve yaşam döngüsü.
 - `agents/openai.yaml`: Codex/ChatGPT arayüz metadatası.
 - `references/delivery-lifecycle.md`: Orantılı teslimat aşamaları ve karar kapıları.
