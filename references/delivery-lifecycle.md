@@ -1,74 +1,51 @@
 # Proportional Delivery Lifecycle
 
-The lifecycle defines decision gates, not a mandatory pile of documents. Create the smallest durable artifact set that preserves scope, reasoning, evidence, and resumption state.
+The lifecycle defines material decisions, not a mandatory pile of documents or approval turns. Create the smallest durable artifact set that preserves scope, reasoning, evidence, and resumption state. Apply the selected execution budget from [execution-budgets.md](execution-budgets.md).
 
-## Greenfield bootstrap
+## Bootstrap
 
-Before application scaffolding:
+For greenfield work, confirm the workspace boundary, capture the brief, record material assumptions, select assurance and execution modes, and create the executor instruction file plus minimum sources of truth. Do not scaffold application code during a bootstrap-only phase.
 
-1. Confirm the workspace boundary and whether it is truly empty.
-2. Capture the raw brief and identify its source.
-3. Record material assumptions and discovery questions.
-4. Select and record the assurance profile.
-5. Create the executor's project instruction file.
-6. Create only the project artifacts needed for the profile.
-7. Present the bootstrap/discovery gate and stop.
+For an existing repository or migration, first read active instructions, inspect git status, preserve user work, discover validation and deployment paths, run safe baseline checks when authorized, and reconcile requested behavior with actual behavior.
 
-The agent owns these artifacts. The Product Owner supplies decisions and approvals, not document drafting labor.
+Bootstrap is not automatically a separate approval gate. In a bounded Lean project, combine its findings with the Product Gate unless a workspace, risk, or authorization decision requires an earlier stop.
 
-## Existing repository or migration bootstrap
+## Compact artifact sets
 
-Before changing established files:
+### Lean execution
 
-1. Read active agent instructions and repository documentation.
-2. Inspect git status and preserve user work.
-3. Discover the build, test, lint, type-check, runtime, and deployment paths.
-4. Run safe baseline checks when authorized and practical.
-5. Map current architecture, external systems, data, and known gaps.
-6. Reconcile requested behavior with actual behavior before proposing new rules.
-7. Present an adoption or migration plan and stop at the applicable gate.
+Usually keep:
 
-Do not replace working project conventions merely because this reference uses different filenames.
+- the executor instruction file;
+- a combined product and acceptance source;
+- a combined technical plan;
+- a delivery-state index when work spans sessions.
 
-## Suggested artifact sets
+Add a separate QA report, operations guide, or release record only when it preserves evidence that would otherwise be lost or ambiguous.
 
-### Light
+### Balanced execution
 
-A single `docs/project.md` may combine brief, scope, acceptance criteria, plan, decisions, and known risks. Add a short progress or release section only if the work spans sessions.
+Keep product requirements, technical decisions, and delivery state separate. Acceptance criteria may live with product requirements; architecture, data model, test strategy, and increments may share one technical plan. Add operations, QA, or release artifacts only as their independent lifecycle warrants.
 
-### Standard
+### Maximum execution
 
-Keep distinct sources of truth when they change independently. A typical set is:
+Add only risk-specific artifacts such as a threat model, data map, authorization matrix, migration rehearsal, rollback plan, integration contracts, security findings, operational readiness evidence, or incident procedure. Any assurance profile may force a specific artifact even under a smaller execution budget; record that exception rather than weakening the control.
 
-- product brief or specification;
-- acceptance criteria;
-- architecture and data model;
-- implementation plan and progress state;
-- decision records for consequential changes;
-- test strategy and QA findings;
-- release checklist.
+## Material gates
 
-Names and layout may follow repository conventions.
+### Product Gate
 
-### High assurance
+Confirm users, goals, in-scope behavior, exclusions, important edge cases, non-functional requirements, and measurable acceptance criteria. Combine with bootstrap or technical approval when the project is small and the decision remains clear.
 
-Add only the risk artifacts that apply, such as a threat model, data map, authorization matrix, migration runbook, rollback plan, integration contracts, security findings, operational readiness evidence, or incident procedure.
+### Technical Gate
 
-## Required decision gates
+Confirm the selected approach, meaningful alternatives, data and trust boundaries, dependency choices, test strategy, delivery increments, operational consequences, and unresolved risks. Once approved, implementation may proceed across planned increments without repeated permission.
 
-### Product gate
+### Change-Control Gate
 
-Confirm users, goals, in-scope behavior, exclusions, important edge cases, non-functional requirements, and measurable acceptance criteria. Light projects may combine this with the technical gate.
+Stop only when new information materially changes scope, cost, schedule, architecture, data handling, security posture, assurance profile, or an external authorization. Record the decision without rewriting history.
 
-### Technical gate
-
-Confirm the selected approach, meaningful alternatives, data and trust boundaries, dependency choices, test strategy, delivery increments, operational consequences, and unresolved risks.
-
-### Change-control gate
-
-Stop when new information materially changes scope, cost, schedule, architecture, data handling, security posture, or the assurance profile. Record the decision rather than silently editing history.
-
-### QA triage gate
+### QA Triage Gate
 
 Classify independent findings:
 
@@ -77,21 +54,28 @@ Classify independent findings:
 - **Medium:** meaningful defect with bounded impact or a reasonable workaround.
 - **Low:** minor usability, maintainability, documentation, or cosmetic issue.
 
-Distinguish a defect against an approved requirement from a new feature request. The Product Owner approves scope changes and risk acceptance. Send accepted fixes to a developer context, then rerun targeted regression and independent verification.
+Distinguish a defect from a new feature request. Send accepted fixes to a developer context. For a narrow fix, independently reverify the failed criterion and adjacent risk; repeat broad QA only if the change surface warrants it.
 
-### Release gate
+### Acceptance and Release Gate
 
-Present evidence for the definition of done, acceptance coverage, automated and manual results, security and accessibility checks, configuration, migrations, monitoring, backup and rollback, documentation, open findings, and residual risk. Do not deploy merely because the gate packet is complete.
+Before final acceptance, give the Product Owner a runnable target and a short user acceptance path. Distinguish:
+
+- implementation complete;
+- independent QA complete;
+- Product Owner acceptance complete;
+- production release authorized and performed.
+
+Do not collapse these states or imply production approval from a local/test handoff. When deployment is in scope, present applicable configuration, migration, monitoring, backup, rollback, security, accessibility, and residual-risk evidence. Do not deploy merely because the packet is complete.
 
 ## Durable state
 
-Keep progress useful for a fresh session:
+Use one compact state index for:
 
-- completed and current increment;
-- pending decisions and blockers;
-- last verified commands and results;
-- known failing checks;
-- next safe action;
-- relevant commit or branch state.
+- current phase and execution budget;
+- approved decisions and pending material decisions;
+- current revision and branch;
+- last relevant validation results;
+- open findings, blockers, and residual risks;
+- next safe action.
 
-Use git as a traceable checkpoint mechanism when available, but do not commit, rewrite, push, or publish without matching the user's authorization and repository norms.
+Update it at meaningful milestones, not after every command. Use git as a traceable checkpoint when available, but do not commit, rewrite, push, publish, or deploy without matching authorization and repository norms.

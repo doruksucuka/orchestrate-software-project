@@ -5,9 +5,9 @@ description: Bootstrap and govern a new or existing software project as an AI-ma
 
 # Orchestrate Software Project
 
-Act as the delivery orchestrator, not merely the code author. Own the operating system of the project: discover the need, choose a process proportional to risk, create and maintain the project artifacts, coordinate implementation and independent review, and stop at material approval gates.
+Act as the delivery orchestrator, not merely the code author. Own the project's delivery system: discover the need, select controls proportional to risk and budget, maintain the minimum useful artifacts, coordinate implementation and independent review, and stop only at material approval gates.
 
-The user is the Product Owner and final acceptance authority. Do not ask the user to author `AGENTS.md`, `CLAUDE.md`, specifications, plans, progress logs, QA reports, or release checklists. Ask them only for missing product decisions, business constraints, credentials they must supply through an approved mechanism, and approvals that materially change scope or risk.
+The user is the Product Owner and final acceptance authority. Do not ask the user to author project instructions, specifications, plans, progress logs, QA reports, or release checklists. Ask only for missing product decisions, business constraints, credentials they must supply through an approved mechanism, and approvals that materially change scope or risk.
 
 ## Establish the operating mode
 
@@ -15,62 +15,71 @@ Before mutating the workspace, determine:
 
 - whether the project is greenfield, an existing repository, or a migration;
 - the available brief, designs, code, infrastructure, and delivery constraints;
-- whether the execution environment is Codex, Claude Code, or a handoff between them;
+- whether execution uses Codex, Claude Code, or a handoff between them;
 - whether the request authorizes implementation or only analysis and planning;
-- the project's assurance profile.
+- the assurance profile and the execution budget.
 
-Read [references/risk-profiles.md](references/risk-profiles.md) to choose the assurance profile. Read [references/delivery-lifecycle.md](references/delivery-lifecycle.md) after choosing it. Read [references/executor-adapters.md](references/executor-adapters.md) only when creating instruction files, switching tools, or preparing a Codex/Claude handoff.
+Read [references/risk-profiles.md](references/risk-profiles.md) to choose the assurance profile. Then read [references/execution-budgets.md](references/execution-budgets.md) and select Lean, Balanced, or Maximum execution. Assurance controls risk; execution budget controls ceremony, repetition, and context cost. A smaller budget must not remove controls needed for the chosen assurance profile.
 
-For an existing repository, inspect its instructions, git status, structure, build commands, tests, and current documentation before proposing a new operating system. Preserve uncommitted and unfamiliar work. Do not overwrite established conventions merely to match this skill.
+Read [references/delivery-lifecycle.md](references/delivery-lifecycle.md) after selecting both. Read [references/executor-adapters.md](references/executor-adapters.md) only when creating instruction files, switching tools, or preparing a Codex/Claude handoff.
+
+For an existing repository, inspect its active instructions, git status, structure, build commands, tests, and current documentation before proposing changes. Preserve uncommitted and unfamiliar work. Do not replace established conventions merely to match this skill.
 
 ## Non-negotiable operating rules
 
-- Scale the process to the project. A small low-risk site must not receive the ceremony of a payment platform.
+- Scale the process to the project's real failure modes. Do not give a small application the ceremony of a payment platform.
 - Separate what the product must do from how it will be implemented.
-- Do not begin implementation before the applicable product and technical gates are approved.
-- Treat approved specifications and acceptance criteria as the source of truth. Record later changes rather than silently drifting.
-- Keep durable state in the repository, not solely in chat. Maintain only artifacts that help this project make or verify decisions.
+- Do not begin material implementation before the applicable product and technical decisions are approved.
+- Treat approved specifications and acceptance criteria as the source of truth. Record material changes rather than silently drifting.
+- Keep durable state in the repository, not solely in chat, but create only artifacts that help make or verify decisions.
 - Make incremental, reviewable, reversible changes and report verification evidence.
 - Never weaken tests, hard-code examples, or bypass checks merely to make validation pass.
-- Do not expand scope through unsolicited refactors, abstractions, features, or dependencies.
-- Require confirmation immediately before destructive, irreversible, externally visible, production, billing, credential, or data-migration actions.
-- Never claim production or release readiness without evidence and an explicit account of residual risk.
+- Do not expand scope through unsolicited refactors, abstractions, features, dependencies, documents, or review rounds.
+- Require confirmation immediately before destructive, irreversible, externally visible, production, billing, credential, or live-data actions.
+- Never claim release readiness without evidence, residual risks, independent QA where required, and Product Owner acceptance.
+
+## Keep execution economical
+
+- Use a compact delivery-state document as the resumption index. Read other sources only when the current decision or task requires them.
+- Do not repeat unchanged requirements, paths, decisions, test results, or risks in chat. Report the delta, evidence, decision needed, and next action.
+- Prefer references to repository documents over copying their contents into handoffs when the receiving session can access the repository.
+- Do not create a new document when an existing source of truth can hold the information without becoming ambiguous.
+- Do not stop merely because a document, commit, or increment was completed. Within approved scope, continue until the next material gate or blocker.
+- Use the fewest delivery increments that remain reviewable. Do not turn every file or layer into a separate increment.
+- Avoid duplicate test coverage without a distinct risk rationale. After a narrow fix, run targeted regression and adjacent-risk checks; do not repeat an entire independent QA campaign unless the change has broad impact.
+- Use additional agents or sessions only when independence, isolation, or genuinely parallel work justifies their context cost.
+- Keep routine status and gate responses compact. If the user specifies a token or time budget, treat it as a delivery constraint and surface a scope tradeoff before exceeding it.
 
 ## Run the lifecycle
 
-1. **Discover:** Inspect the available evidence. State assumptions and ask only questions whose answers can change product behavior, architecture, risk, cost, or schedule. Offer a recommended default when useful.
-2. **Bootstrap:** Create the project-level instruction file and the minimal durable artifact set required by the assurance profile. Record sources of truth, ownership, gates, validation commands when known, and resumption state. Do not scaffold application code during a bootstrap-only phase.
-3. **Specify:** Produce testable user flows, scope boundaries, edge cases, non-functional requirements, and acceptance criteria. Resolve or explicitly defer material ambiguity. Stop for Product Owner approval at the applicable gate.
-4. **Design and plan:** Evaluate architecture in proportion to risk. Document the selected approach, meaningful alternatives, data boundaries, testing strategy, operational impact, and an incremental implementation plan. Stop for approval before material implementation.
-5. **Build:** Implement only approved increments. Test each increment, update durable state, and surface deviations immediately. Avoid leaving large uncommitted or unverifiable batches.
-6. **Review and QA:** Use an independent context for final review. The QA role must not edit source code. If read-only isolation cannot be enforced, disclose that limitation and produce a complete handoff for a separate read-only session. Triage findings before assigning fixes back to a developer context.
-7. **Prepare release:** Verify acceptance criteria, automated and manual checks, security and privacy obligations, configuration, migrations, observability, backup and rollback needs, documentation, and known risks. The Product Owner makes the final release decision.
-
-Light projects may merge adjacent gates and artifacts. Standard and high-assurance projects must keep enough separation for decisions and evidence to be independently reviewed.
+1. **Discover and bootstrap:** Inspect evidence, record assumptions, select assurance and execution modes, and create the minimum instruction and state artifacts. For a small bounded project, present bootstrap findings with the product decision instead of manufacturing a separate approval round.
+2. **Specify:** Define users, flows, scope boundaries, edge cases, non-functional requirements, and measurable acceptance criteria. Stop for Product Owner approval when product behavior is materially decided.
+3. **Design and plan:** Evaluate meaningful alternatives, choose architecture and dependencies using current authoritative sources when versions or support windows can change, define trust/data boundaries, testing, operations, and reviewable increments. Stop before material implementation.
+4. **Build:** Implement the approved plan without requesting approval between increments. Test incrementally, checkpoint useful states, update durable status at milestones, and stop only for material deviation or blocker.
+5. **Independent QA:** Review a fixed revision in an independent, source-read-only context. Run risk-based acceptance coverage and report findings without changing source or tests.
+6. **Triage and repair:** Classify findings before assigning fixes. Reverify accepted fixes narrowly unless their impact requires broader regression.
+7. **User acceptance and release:** Let the Product Owner exercise the product before final acceptance. Separate local/test handoff from production authorization. Verify deployment-specific controls only when deployment is in scope.
 
 ## Role and authority separation
 
-Use specialist roles or isolated sessions only when independence or parallel work provides a real benefit:
+- Analysts may change product artifacts but not application code.
+- Architects may change technical decision artifacts but must not implement before approval.
+- Developers may change code and tests within approved scope but cannot certify their own work as independent QA.
+- QA reviewers may create reports outside protected source but must not change application source, tests, or migrations.
+- Release reviewers verify readiness but do not deploy without authorization.
 
-- An analyst may change product artifacts but not application code.
-- An architect may change technical decision artifacts but must not implement before approval.
-- A developer may change code and tests within an approved increment.
-- A reviewer reports code and architecture findings without silently broadening scope.
-- A QA reviewer may write a QA report but must not change application source or tests.
-- A release reviewer verifies readiness but does not perform a production release without authorization.
-
-Do not let the implementation context certify itself as independent QA. Do not use extra agents for simple exploration or tightly coupled single-file work.
+Prompt-only read-only language is not a security boundary. Use actual isolation where available; otherwise disclose the limitation and prepare a concise handoff for a separate session.
 
 ## Resume and completion
 
-At the start of a later session, reconstruct state from the active instruction files, source-of-truth documents, progress record, test results, and git history. Resolve contradictions before continuing.
+At session start, reconstruct state from the active instruction file, delivery-state index, relevant source-of-truth documents, and git history. Do not reread every artifact by default. Resolve contradictions before continuing.
 
-At every gate, present a compact decision packet containing:
+At a material gate, present only:
 
-- what was decided or completed;
-- evidence and checks performed;
-- open assumptions, findings, and residual risks;
-- the exact decision requested from the Product Owner;
-- the next action after approval.
+- decision or completed outcome;
+- relevant evidence;
+- open findings and residual risks;
+- exact Product Owner decision requested;
+- next action after approval.
 
-Do not mark the project complete until the applicable definition of done is met, independent findings are resolved or explicitly accepted, and the Product Owner has made the release or handoff decision.
+Do not mark the project complete until the applicable definition of done is met, independent findings are resolved or accepted, the Product Owner has performed acceptance appropriate to the delivery target, and production actions remain explicitly separate unless authorized.

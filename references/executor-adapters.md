@@ -8,9 +8,9 @@ Use one neutral delivery method while expressing persistent instructions in the 
 - Use nested instruction files only when a subtree has genuinely different commands or constraints.
 - Keep long product requirements, plans, findings, and temporary state in project documents rather than `AGENTS.md`.
 - Verify which instruction sources are active when precedence is uncertain.
-- Because a newly created instruction chain may not govern the already-running bootstrap context, finish the bootstrap gate and begin the approved implementation in a fresh Codex session that loads the new files.
+- Because a newly created instruction chain may not govern the already-running bootstrap context, begin approved implementation in a fresh Codex session that loads the new files.
 
-When this skill is running inside the project Codex session, operate the lifecycle directly. Do not merely generate prompts for another Codex instance unless the user explicitly requests a handoff.
+When this skill runs inside the project Codex session, operate the lifecycle directly. Do not generate prompts for another Codex instance unless the user requests a handoff or role isolation requires it.
 
 ## Claude Code execution
 
@@ -19,38 +19,35 @@ When this skill is running inside the project Codex session, operate the lifecyc
 - Keep product requirements and delivery state in ordinary project documents.
 - After bootstrap approval, begin implementation in a fresh session and verify that the intended project memory files loaded.
 
-If this skill is invoked from Codex only to prepare a Claude Code project, produce a single bootstrap handoff for Claude instead of creating Claude's project artifacts on its behalf. Claude must inspect the target workspace and create its own operating files.
+If Codex is preparing a Claude Code project, produce a single bootstrap handoff instead of creating Claude's project artifacts on its behalf. Claude must inspect the target workspace and create its own operating files.
 
 ## Dual-tool project
 
-Prefer a tool-neutral `AGENTS.md` as the canonical shared instruction body and a small `CLAUDE.md` that imports or points to it using the mechanism supported by the installed Claude Code version. Put only Claude-specific additions in `CLAUDE.md`.
+Prefer a tool-neutral `AGENTS.md` as the canonical shared instruction body and a small `CLAUDE.md` that imports or points to it using a mechanism supported by the installed Claude Code version. Put only Claude-specific additions in `CLAUDE.md`.
 
-Before choosing this arrangement, verify the current executor supports the intended import behavior. If it does not, use a shared neutral document referenced by two minimal wrappers and add a drift check to project maintenance.
-
-Do not place role-specific temporary identities such as "you are the QA" in the shared root instructions. Supply those through the isolated role/session configuration so the same repository can support analysts, developers, reviewers, and QA without contradictory rules.
+If reliable import is unavailable, use one shared neutral document referenced by two minimal wrappers and add a drift check. Do not place temporary identities such as "you are the QA" in shared root instructions; supply them through the isolated session.
 
 ## Independent QA boundary
 
-Prompt-only read-only language is not a security boundary. Prefer an actual read-only environment, permission profile, sandbox, separate worktree with protected source, or review facility that cannot mutate the implementation.
+Prompt-only read-only language is not a security boundary. Prefer a read-only environment, permission profile, protected snapshot, separate worktree, or review facility that cannot mutate implementation.
 
-If the executor cannot enforce read-only access:
+If read-only access cannot be enforced:
 
-1. Finish implementation and record the exact revision under review.
-2. Create a complete QA handoff containing sources of truth, setup commands, acceptance criteria, known limitations, and required report format.
-3. Ask the user to start a separate review session with source mutation disabled where possible.
-4. Require the reviewer to report any accidental mutation and discard that review run.
-5. Return findings to the orchestrator for triage; only a developer context applies fixes.
+1. Record the exact revision under review.
+2. Put stable QA scope and commands in repository documents when they will be reused.
+3. Start a separate review session with mutation disabled where possible.
+4. Require the reviewer to report accidental mutation and discard that run.
+5. Return findings for triage; only a developer context applies fixes.
 
-## Handoffs
+## Compact handoffs
 
-A handoff must be self-contained but not copy the entire repository context. Include:
+A handoff is self-contained when the receiver can locate the target and its authoritative instructions; it does not need to duplicate accessible repository content. Include only:
 
-- target repository and revision;
-- role, authority, and prohibited actions;
-- required source-of-truth files;
-- exact objective and stopping condition;
-- setup and verification commands when known;
-- expected output artifact;
-- open risks or assumptions that affect the task.
+- repository, branch, and exact revision;
+- role boundaries and prohibited actions;
+- relevant source-of-truth paths;
+- objective and stopping condition;
+- output artifact or response expected;
+- only setup details or risks not already recorded.
 
-The receiving executor must inspect the actual files before making claims or changes.
+Do not inline acceptance criteria, test matrices, or long command lists already available to the receiving session. The receiver must inspect referenced files before making claims. After a scoped fix, hand off the failed criterion and adjacent risk rather than the complete original QA campaign.
