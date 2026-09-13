@@ -1,30 +1,42 @@
 # AI-Managed Software Project Orchestrator
 
-Codex veya Claude Code'un yalnızca kod yazmasını değil; bir yazılım projesini keşif, şartname, planlama, geliştirme, bağımsız QA ve production hazırlığı boyunca yönetmesini sağlayan yeniden kullanılabilir Skill.
+Codex veya Claude Code'un yalnızca kod yazmasını değil; bir yazılım projesini keşif, şartname, planlama, geliştirme, bağımsız QA, kullanıcı kabulü ve production hazırlığı boyunca yönetmesini sağlayan yeniden kullanılabilir Skill.
 
 ## Ne sağlar?
 
 - Boş klasör, mevcut repository ve migration projelerini ayrı biçimde ele alır.
-- Projeyi riskine göre **Light**, **Standard** veya **High Assurance** olarak sınıflandırır.
+- Projeyi riske göre **Light**, **Standard** veya **High Assurance** olarak sınıflandırır.
+- Süreç yoğunluğunu ayrıca **Lean**, **Balanced** veya **Maximum** yürütme bütçesiyle ayarlar.
 - İş talebini test edilebilir gereksinimlere ve kabul kriterlerine dönüştürür.
 - `AGENTS.md`, `CLAUDE.md` ve gerekli proje dokümanlarını AI'ın oluşturup güncel tutmasını sağlar.
-- Şartname ve teknik plan onaylanmadan geliştirmeye başlanmasını engeller.
+- Ürün ve teknik kararlar onaylanmadan geliştirmeye başlamaz.
 - Developer ile kaynak kodu değiştiremeyen bağımsız QA oturumunu ayırır.
-- Test kanıtları, açık riskler, rollback ve release kontrolleri olmadan production hazır iddiasında bulunmaz.
+- Bağımsız QA ile Product Owner kullanıcı kabulünü birbirine karıştırmaz.
+- Test kanıtları ve residual riskler olmadan production hazır iddiasında bulunmaz.
 
-Kullanıcı **Product Owner** ve nihai kabul makamıdır. Belgeleri kullanıcıya yazdırmak yerine AI hazırlar; kullanıcı yalnızca önemli ürün kararlarını ve geçiş kapılarını onaylar.
+Kullanıcı **Product Owner** ve nihai kabul makamıdır. Belgeleri AI hazırlar; kullanıcı yalnızca önemli ürün kararlarını, maddi değişiklikleri ve teslim kararını onaylar.
+
+## İki ayrı ölçek
+
+Güvence profili hangi risklerin kontrol edileceğini belirler. Yürütme bütçesi ise bu kontrolün ne kadar belge, tekrar, oturum ve bağlam maliyetiyle uygulanacağını belirler.
+
+| Yürütme bütçesi | Uygun kullanım |
+| --- | --- |
+| Lean | Pilotlar, küçük uygulamalar ve token/zaman duyarlı çalışmalar |
+| Balanced | Normal müşteri teslimleri ve production hedefli standart projeler |
+| Maximum | Yüksek risk, canlı migration ve derin doğrulama gerektiren sistemler |
+
+Örneğin kişisel veri ve yönetici girişi olan küçük bir teklif takip uygulaması **Standard assurance + Lean execution** olarak yürütülebilir. Lean seçim güvenlik veya kabul kriterlerini kaldırmaz; belge tekrarını, gereksiz test çoğaltmayı ve onay turlarını azaltır.
 
 ## Çalışma akışı
 
-1. **Discovery:** İhtiyaçları, kısıtları, mevcut varlıkları ve riskleri belirler.
-2. **Bootstrap:** Uygun talimat dosyalarını ve minimum proje dokümantasyonunu oluşturur.
-3. **Specification:** Kapsamı, kullanıcı akışlarını, edge case'leri ve kabul kriterlerini netleştirir.
-4. **Architecture & Plan:** Teknik yaklaşımı ve doğrulanabilir geliştirme adımlarını planlar.
-5. **Build:** Yalnızca onaylanmış kapsamı küçük ve test edilebilir parçalar halinde geliştirir.
-6. **Independent QA:** Ayrı ve mümkünse salt okunur bir oturumda inceleme yürütür.
-7. **Release Readiness:** Test, güvenlik, erişilebilirlik, yapılandırma, migration, gözlemlenebilirlik ve rollback kanıtlarını toplar.
-
-Her kritik aşama bir karar paketiyle Product Owner onayına sunulur.
+1. **Discovery & Bootstrap:** İhtiyaçları, varlıkları, güvence profilini ve yürütme bütçesini belirler.
+2. **Product Gate:** Davranışları ve ölçülebilir kabul kriterlerini onaylatır.
+3. **Technical Gate:** Mimariyi, bağımlılıkları, riskleri ve az sayıdaki dikey artımı onaylatır.
+4. **Build:** Onaylı kapsam içinde artımlar arasında yeniden izin istemeden geliştirir.
+5. **Independent QA:** Sabit revision'ı ayrı ve salt-okunur bağlamda inceler.
+6. **Triage & Targeted Retest:** Gerçek bulguları ayıklar; dar düzeltmeden sonra yalnız ilgili riski yeniden doğrular.
+7. **User Acceptance & Release:** Kullanıcının ürünü görmesini sağlar; yerel kabul ile production yetkisini ayrı tutar.
 
 ## Kurulum
 
@@ -57,8 +69,6 @@ npx skills add https://github.com/doruksucuka/orchestrate-software-project \
   --skill orchestrate-software-project --global --agent claude-code --yes
 ```
 
-`--global` Skill'i tüm projelerde kullanılabilir yapar. `--yes` etkileşimli onayları atlar; hedef araçları kendiniz seçmek isterseniz bu parametreyi kaldırabilirsiniz.
-
 Kurulumu doğrulamak için:
 
 ```bash
@@ -83,11 +93,19 @@ Claude Code:
 
 ```text
 Yeni bir projeye başlıyoruz. Bu boş klasörde süreci uçtan uca yönet.
-Önce iş talebini analiz et, uygun güvence profilini öner ve bootstrap aşamasını yürüt.
-Şartname ve plan onaylanmadan uygulama kodu yazma.
+Uygun güvence profilini ve yürütme bütçesini öner.
+Ürün ve teknik kararlar onaylanmadan uygulama kodu yazma.
 ```
 
-Skill, açıklamasıyla eşleşen kapsamlı proje başlatma ve yönetme taleplerinde otomatik olarak da seçilebilir. Tek dosyalık düzenlemeler veya dar kapsamlı hata düzeltmeleri için tasarlanmamıştır.
+Belirli bir bütçe doğrudan da istenebilir:
+
+```text
+Bu küçük projeyi Standard assurance + Lean execution ile yönet.
+Gerekli güvenlik ve QA kontrollerini koru; belgeleri, onay turlarını,
+handoff'ları ve durum yanıtlarını mümkün olduğunca kısa tut.
+```
+
+Skill, kapsamlı proje başlatma ve yönetme taleplerinde otomatik olarak da seçilebilir. Tek dosyalık düzenlemeler veya dar kapsamlı hata düzeltmeleri için tasarlanmamıştır.
 
 ## Güncelleme
 
@@ -105,16 +123,10 @@ orchestrate-software-project/
 │   └── openai.yaml
 └── references/
     ├── delivery-lifecycle.md
+    ├── execution-budgets.md
     ├── executor-adapters.md
     └── risk-profiles.md
 ```
-
-- `README.md`: Kurulum, kullanım ve repository özeti.
-- `SKILL.md`: Ana orkestrasyon kuralları ve yaşam döngüsü.
-- `agents/openai.yaml`: Codex/ChatGPT arayüz metadatası.
-- `references/delivery-lifecycle.md`: Orantılı teslimat aşamaları ve karar kapıları.
-- `references/executor-adapters.md`: Codex, Claude Code ve çift araç kullanım biçimleri.
-- `references/risk-profiles.md`: Light, Standard ve High Assurance sınıflandırması.
 
 ## Önemli sınır
 
