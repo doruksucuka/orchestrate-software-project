@@ -1,6 +1,13 @@
 # Assurance Profiles
 
-Choose the lightest profile that still controls the project's real failure modes. Classify from evidence, not budget, prestige, or code volume alone.
+Choose the lightest profile that still controls the project's real failure modes. Classify from evidence, not budget, prestige, or code volume alone. The executor proposes the profile and rationale; the Product Owner approves it no later than the Product Gate.
+
+## Mandatory floors
+
+- Authentication, private user data, ordinary personal data, an admin area, or persistent business workflow requires at least **Standard**.
+- Payments or entitlements, regulated or highly sensitive data, authorization across tenants, destructive live-data migration, critical identity, or irreversible external actions require **High Assurance**.
+
+Do not lower these floors to satisfy an execution budget. When discovery reveals a trigger, raise the proposed profile immediately and record the decision. Reducing an approved profile requires Product Owner approval and a rationale showing the trigger no longer applies.
 
 ## Decision dimensions
 
@@ -16,7 +23,7 @@ Evaluate:
 
 ## Light
 
-Use only when failure is low-impact and the work has no authentication, sensitive data, money movement, destructive migration, or critical integration.
+Use only when failure is low-impact and the work has no authentication, personal or sensitive data, money movement, persistent business workflow, destructive migration, or critical integration.
 
 Typical examples: a static marketing site, a local prototype, a small public content tool.
 
@@ -24,11 +31,11 @@ Expected controls:
 
 - short product brief with acceptance criteria;
 - compact technical plan;
-- build, lint, type, functional, accessibility, and visual checks as applicable;
+- build, lint, type, functional, accessibility, and visual checks where relevant;
 - a focused independent review;
 - a short release or handoff checklist.
 
-Combine documents and gates when that improves clarity.
+Record a rationale for each check category omitted as not applicable. Combine documents and gates when that improves clarity.
 
 ## Standard
 
@@ -48,7 +55,7 @@ Expected controls:
 
 ## High assurance
 
-Use when any single failure mode can cause significant financial, privacy, security, legal, data-loss, multi-tenant, or operational harm. Elevate to this profile for payment logic, regulated or highly sensitive data, authorization across tenants, destructive live-data migration, critical identity, or irreversible external actions.
+Use when any single failure mode can cause significant financial, privacy, security, legal, data-loss, multi-tenant, or operational harm.
 
 Typical examples: payment or entitlement systems, health or financial workflows, multi-tenant SaaS authorization, migrations against live customer data.
 
@@ -67,4 +74,4 @@ Do not imply that an AI review replaces legal, compliance, penetration-testing, 
 
 ## Profile changes
 
-Record the chosen profile and rationale. Reassess when scope adds authentication, sensitive data, payments, external side effects, live migrations, additional tenants or roles, or critical operations. Increasing assurance may add controls; reducing it requires an explicit rationale and Product Owner approval.
+Reassess when scope or evidence changes. Increasing assurance may add controls; reducing it requires the explicit approval described above.

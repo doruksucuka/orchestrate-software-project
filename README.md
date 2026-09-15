@@ -12,9 +12,12 @@ Codex veya Claude Code'un yalnızca kod yazmasını değil; bir yazılım projes
 - Ürün ve teknik kararlar onaylanmadan geliştirmeye başlamaz.
 - Developer ile kaynak kodu değiştiremeyen bağımsız QA oturumunu ayırır.
 - Bağımsız QA ile Product Owner kullanıcı kabulünü birbirine karıştırmaz.
+- Test beyanı ile doğrulanabilir kanıtı ayırır; QA bulgularını ortak bir şemaya bağlar.
 - Test kanıtları ve residual riskler olmadan production hazır iddiasında bulunmaz.
 
 Kullanıcı **Product Owner** ve nihai kabul makamıdır. Belgeleri AI hazırlar; kullanıcı yalnızca önemli ürün kararlarını, maddi değişiklikleri ve teslim kararını onaylar.
+
+Bu repository kendi başına bir multi-agent runtime değildir. Analyst, Architect, Developer ve Release Reviewer çoğunlukla yaşam döngüsündeki yetki kapsamlarıdır; aynı executor bunları sırasıyla üstlenebilir. Seçilen güvence profilinin gerektirdiği bağımsız QA ise ayrı bağlamda ve sabit revision üzerinde yürütülür.
 
 ## İki ayrı ölçek
 
@@ -123,6 +126,7 @@ orchestrate-software-project/
 │   └── openai.yaml
 └── references/
     ├── delivery-lifecycle.md
+    ├── evidence-and-findings.md
     ├── execution-budgets.md
     ├── executor-adapters.md
     └── risk-profiles.md
