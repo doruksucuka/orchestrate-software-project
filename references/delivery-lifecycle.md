@@ -4,7 +4,7 @@ The lifecycle defines material decisions, not a mandatory pile of documents or a
 
 ## Bootstrap
 
-For greenfield work, confirm the workspace boundary, capture the brief, record material assumptions, select assurance and execution modes, and create the executor instruction file plus minimum sources of truth. Do not scaffold application code during a bootstrap-only phase.
+For greenfield work, confirm the workspace boundary, capture the brief, separate user-provided facts from inferred assumptions and unresolved decisions, propose assurance and execution modes, and create the executor instruction file plus minimum sources of truth. Do not scaffold application code during a bootstrap-only phase.
 
 For an existing repository or migration, first read active instructions, inspect git status, preserve user work, discover validation and deployment paths, run safe baseline checks when authorized, and reconcile requested behavior with actual behavior.
 
@@ -35,7 +35,7 @@ Add only risk-specific artifacts such as a threat model, data map, authorization
 
 ### Product Gate
 
-Confirm users, goals, in-scope behavior, exclusions, important edge cases, non-functional requirements, and measurable acceptance criteria. Combine with bootstrap or technical approval when the project is small and the decision remains clear.
+Confirm users, goals, in-scope behavior, exclusions, important edge cases, non-functional requirements, and measurable acceptance criteria. Show user-provided decisions, inferred assumptions, and unresolved choices separately. Obtain explicit approval of the assurance profile and execution budget. Combine with bootstrap or technical approval when the project is small and the decision remains clear.
 
 ### Technical Gate
 
@@ -54,7 +54,7 @@ Classify independent findings:
 - **Medium:** meaningful defect with bounded impact or a reasonable workaround.
 - **Low:** minor usability, maintainability, documentation, or cosmetic issue.
 
-Distinguish a defect from a new feature request. Send accepted fixes to a developer context. For a narrow fix, independently reverify the failed criterion and adjacent risk; repeat broad QA only if the change surface warrants it.
+Apply [evidence-and-findings.md](evidence-and-findings.md). Distinguish a defect from a new feature request. A developer may challenge but not close a finding; ambiguity or disputed Critical/High findings go to the Product Owner. Send accepted fixes to a developer context. For a narrow fix, independently reverify the failed criterion and adjacent risk; repeat broad QA only if the change surface warrants it.
 
 ### Acceptance and Release Gate
 
@@ -72,6 +72,7 @@ Do not collapse these states or imply production approval from a local/test hand
 Use one compact state index for:
 
 - current phase and execution budget;
+- approved assurance profile and this skill's metadata version, plus source revision when available;
 - approved decisions and pending material decisions;
 - current revision and branch;
 - last relevant validation results;
